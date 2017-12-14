@@ -1,0 +1,85 @@
+version: "3"
+services:
+    clock-fix:
+        image: alpine
+        command: hwclock -s
+        privileged: true
+    bootnode:
+        image: zepp0/bootnode
+        command: -nodekey /conf/bootnode.key
+        links:
+            - clock-fix
+        volumes:
+            - ./config:/conf
+        networks:
+            ether:
+                ipv4_address: 10.5.0.4
+        ports:
+            - "30301:30301"
+    geth-node1-init:
+        image: zepp0/geth
+        command: --datadir /data init /conf/genesis.json 
+        links:
+            - clock-fix
+        volumes:
+            - ./config:/conf
+            - geth-node1-data:/data
+    geth-node1:
+        image: zepp0/geth
+        links:
+            - geth-node1-init
+            - bootnode
+        command: --datadir /data --verbosity 3 --networkid 999 --identity "Node1" --rpc --rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301"  --mine --minerthreads 1 --etherbase 0x5fe2ebc7cc54560d7d88681f8277c91b57c7362a
+        ports:
+            - "30303:30303"
+            - "8545:8545"
+            - "8546:8546"
+        volumes:
+            - geth-node1-data:/data
+        networks:
+            ether:
+                ipv4_address: 10.5.0.5
+
+    geth-node2-installKeys:
+        image: alpine
+        command:  sh -c "mkdir -p /data/keystore && cp -f /conf/keys/* /data/keystore/"
+        links:
+            - clock-fix
+        volumes:
+            - ./config:/conf
+            - geth-node2-data:/data
+    geth-node2-init:
+        image: zepp0/geth
+        command: --datadir /data init /conf/genesis.json 
+        links:
+            - clock-fix
+        volumes:
+            - ./config:/conf
+            - geth-node2-data:/data
+    geth-node2:
+        image: zepp0/geth
+        links:
+            - geth-node2-init
+            - geth-node2-installKeys
+            - bootnode
+        command: --datadir /data --verbosity 3 --networkid 999 --identity "Node2" --rpc --rpcapi admin,eth,net,peronsal,web3 -rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301" 
+        ports:
+            - "30304:30303"
+            - "8547:8545"
+            - "8548:8546"
+        volumes:
+            - geth-node2-data:/data
+        networks:
+            ether:
+                ipv4_address: 10.5.0.6
+volumes: 
+    geth-node1-data:
+    geth-node2-data:
+
+networks:
+    ether:
+        driver: bridge
+        ipam:
+            config:
+            - 
+                subnet: 10.5.0.0/16
