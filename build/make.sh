@@ -12,3 +12,9 @@ do
         exit $rc
     fi
 done
+
+
+if [[ ! -z "$1" ]]; then
+    docker image rm geth-base:$1
+fi
+docker image rm geth-base
