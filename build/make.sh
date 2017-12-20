@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for app in geth-base geth abigen bootnode;
+for app in geth abigen bootnode;
 do
     v_args=""
     if [[ ! -z "$1" ]]; then
@@ -13,8 +13,4 @@ do
     fi
 done
 
-
-if [[ ! -z "$1" ]]; then
-    docker image rm geth-base:$1
-fi
-docker image rm geth-base
+docker image prune
