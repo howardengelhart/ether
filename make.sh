@@ -13,4 +13,4 @@ do
     fi
 done
 
-docker image prune
+docker image prune -f

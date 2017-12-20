@@ -1,11 +1,14 @@
-version: "3"
+version: "3.1"
 services:
     clock-fix:
         image: alpine
         command: hwclock -s
         privileged: true
     bootnode:
-        image: zepp0/bootnode
+        image: bootnode
+        build:
+            context: ./
+            dockerfile: Dockerfile.bootnode
         command: -nodekey /conf/bootnode.key
         links:
             - clock-fix
@@ -17,7 +20,10 @@ services:
         ports:
             - "30301:30301"
     geth-node1-init:
-        image: zepp0/geth
+        image: geth
+        build:
+            context: ./
+            dockerfile: Dockerfile.geth
         command: --datadir /data init /conf/genesis.json 
         links:
             - clock-fix
@@ -25,7 +31,10 @@ services:
             - ./config:/conf
             - geth-node1-data:/data
     geth-node1:
-        image: zepp0/geth
+        image: geth
+        build:
+            context: ./
+            dockerfile: Dockerfile.geth
         links:
             - geth-node1-init
             - bootnode
@@ -49,7 +58,10 @@ services:
             - ./config:/conf
             - geth-node2-data:/data
     geth-node2-init:
-        image: zepp0/geth
+        image: geth
+        build:
+            context: ./
+            dockerfile: Dockerfile.geth
         command: --datadir /data init /conf/genesis.json 
         links:
             - clock-fix
@@ -57,7 +69,10 @@ services:
             - ./config:/conf
             - geth-node2-data:/data
     geth-node2:
-        image: zepp0/geth
+        image: geth
+        build:
+            context: ./
+            dockerfile: Dockerfile.geth
         links:
             - geth-node2-init
             - geth-node2-installKeys

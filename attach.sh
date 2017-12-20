@@ -30,4 +30,4 @@ case $2 in
     ;;
 esac
 
-docker run --rm --network ether_ether -it zepp0/geth attach "http://${NODE_IP}:8545" $CMD
+docker run --rm --network ether_ether -it geth attach "http://${NODE_IP}:8545" $CMD
