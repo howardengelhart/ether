@@ -38,7 +38,7 @@ services:
         links:
             - geth-node1-init
             - bootnode
-        command: --datadir /data --verbosity 3 --networkid 999 --identity "Node1" --rpc --rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301"  --mine --minerthreads 1 --etherbase 0x5fe2ebc7cc54560d7d88681f8277c91b57c7362a
+        command: --datadir /data --verbosity 2 --networkid 999 --identity "Node1" --rpc --rpcapi admin,db,debug,eth,miner,net,personal,shh,txpool,web3 --rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301" --minerthreads 1 --etherbase 0x5fe2ebc7cc54560d7d88681f8277c91b57c7362a
         ports:
             - "30303:30303"
             - "8545:8545"
@@ -77,7 +77,7 @@ services:
             - geth-node2-init
             - geth-node2-installKeys
             - bootnode
-        command: --datadir /data --verbosity 3 --networkid 999 --identity "Node2" --rpc --rpcapi admin,eth,net,personal,web3 -rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301" 
+        command: --datadir /data --verbosity 2 --networkid 999 --identity "Node2" --rpc --rpcapi admin,db,debug,eth,miner,net,personal,shh,txpool,web3 -rpcaddr "0.0.0.0"  --rpccorsdomain "*" --ws --wsaddr "0.0.0.0" --wsorigins "*" --bootnodes "enode://eb526482d9d2c27c103deca98587a229abec4bbc230e49c390428c468d4da14aaa1e40b23417f19fab3998137d75d8e18c46a66bf132eee5824f339552ca6f0d@10.5.0.4:30301" --minerthreads 1 --etherbase 0x5fe2ebc7cc54560d7d88681f8277c91b57c7362a 
         ports:
             - "30304:30303"
             - "8547:8545"
